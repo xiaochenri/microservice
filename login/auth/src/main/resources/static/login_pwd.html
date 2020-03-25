@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title></title>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/common.js"></script>
+<script type="text/javascript" src="js/jquery.rotate.min.js"></script>
+<link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/inner/common.css" />
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+	<div class="home-body">
+
+		<!-- 首页头部 end-->
+		<!-- 首页主体-->
+		<div class="home-main">
+			<img class="home-logo-link" src="images/home-logo.png" alt="" />
+		</div>
+		<!-- kpi登录 -->
+		<div class="kpi-login">
+			<div class="kpi-lo-tit">
+				<p class="cur">
+					<a href="login.html" target="_self">PKI登录</a>
+				</p>
+				<p class="">密码登录</p>
+			</div>
+			<div class="login-tab">
+				<div class="kpi-lo-panel kpi-backl" style="display: none;">
+					<div class="kpi-lo-bg">
+						<img src="images/v-kpi-icon.png" alt="">
+					</div>
+				</div>
+				<div class="kpi-lo-panel">
+					<div class="login-name-pwd">
+						<form method="post" action="/oauth/user/token">
+						<input type="text" id="username" name="username"
+								placeholder="输入用户名"> <input type="password" id="pwd"
+								name="password" placeholder="输入密码"> <input
+								class="login-btn" type="submit" onclick="" value="登录">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="foot-bg145">
+			<div class="foot-bg75">
+				<img class="foot-logo-trs" src="images/v-trs-logo.png" alt="">
+			</div>
+		</div>
+
+		<img class="home-bg" src="images/home-bg.jpg" alt="" />
+	</div>
+	<script type="text/javascript">
+		function login() {
+			$.post("/oauth/user/token",{
+                "username":$("#username").val(),
+                "password":$("#pwd").val()
+            },function(data){
+                if(data.status == 0){
+                    window.location.href = data.sugessUrl;
+                }else{
+                    alert(data.msg);
+                }
+            });
+		}
+	</script>
+</body>
+</html>
