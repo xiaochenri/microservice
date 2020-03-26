@@ -15,6 +15,7 @@
         <module>base</module>
         <module>gateway</module>
         <module>service_1</module>
+        <module>web</module>
     </modules>
 
     <properties>
