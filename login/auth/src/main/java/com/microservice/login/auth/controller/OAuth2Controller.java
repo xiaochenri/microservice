@@ -31,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 public class OAuth2Controller {
-	@Resource
-	private ObjectMapper objectMapper;
 
 	@Resource
 	private AuthorizationServerTokenServices authorizationServerTokenServices;
@@ -43,6 +41,13 @@ public class OAuth2Controller {
 	@Autowired
 	private ClientDetailsService clientDetailsService;
 
+	/**注意一下路径，不要被oauth2的拦截器拦截
+	 * @param username
+	 * @param password
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@PostMapping(value = "/oauth/user/token")
 	public void getUserTokenInfo(String username, String password,
 			HttpServletRequest request, HttpServletResponse response)
@@ -87,8 +92,8 @@ public class OAuth2Controller {
 		try {
 			//这里配置网关的服务ID、密码信息
 			final String[] clientInfos = new String[2];
-			String clientId = "tttt";
-			String clientSecret = "trs";
+			String clientId = "gateway";
+			String clientSecret = "admin";
 
 			ClientDetails clientDetails = getClient(clientId, clientSecret);
 
@@ -113,24 +118,9 @@ public class OAuth2Controller {
             PrintWriter writer = response.getWriter();
             writer.write(oAuth2AccessToken.getValue());
             writer.flush();
-        } catch (BadCredentialsException
-				| InternalAuthenticationServiceException e) {
-			exceptionHandler(response, badCredenbtialsMsg);
-		} catch (Exception e) {
-			exceptionHandler(response, e);
+        } catch (Exception e) {
+			log.error("exceptionHandler-error:", e);
 		}
-	}
-
-	private void exceptionHandler(HttpServletResponse response, Exception e)
-			throws IOException {
-		log.error("exceptionHandler-error:", e);
-		exceptionHandler(response, e.getMessage());
-	}
-
-	private void exceptionHandler(HttpServletResponse response, String msg)
-			throws IOException {
-		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-
 	}
 
 	private ClientDetails getClient(String clientId, String clientSecret) {

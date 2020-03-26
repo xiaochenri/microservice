@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
  * 此处 需要注意的是 配置远程调用验证/oauth/check_token 会传递应用的ID以及clientSecret到授权服务器进行数据库查询验证确保配置服务准确性
  *
  * 前端绑定token的传递形式 header头 Authorization：bearer822dd781-bdb6-4b35-934c-312b0d9c18b9
+ *
+ * 此处还可以定义是否拦截等相关路径，放行路径面临数据后续获取不全的风险
  */
 @Configuration
 @EnableResourceServer

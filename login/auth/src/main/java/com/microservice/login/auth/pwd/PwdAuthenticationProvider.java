@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 /**
  * 此处进行authentication验证
  */
@@ -38,9 +40,9 @@ public class PwdAuthenticationProvider implements AuthenticationProvider {
 //		}
 		User user = new User();
 		String passWord = "123";
-		user.setUserName("123");
-		user.setPassword("123");
-		user.setId("1");
+		user.setUsername(token.getPrincipal().toString());
+		user.setPassword(token.getPassWord());
+		user.setId(UUID.randomUUID().toString());
 
 		// 检测用户属性 不通过的抛出异常
 		PwdAuthenticationToken authenticationToken = new PwdAuthenticationToken(
