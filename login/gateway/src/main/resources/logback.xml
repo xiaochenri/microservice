@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+debug 级别
+scan  是否自动扫描配置加载 使用jar包启动时无法自动扫描jar内部的文件
+scanPeriod 扫描配置周期
+-->
+<configuration debug="true" scan="false" scanPeriod="1 seconds">
+
+    <!--定义key-value对    后续使用使用${PATTERN}来获取同样的value -->
+    <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread%X{sourceThread}]%logger{24} - %msg%n"/>
+
+    <!--ConsoleAppender 用于在控制台/屏幕输出日志 日志输出器-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--定义了一个过滤器,在配置级别之下的日志输出不会被打印出来-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- encoder 默认配置为PatternLayoutEncoder -->
+        <!--定义控制台输出格式-->
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--文件输出器1，为配置级别过滤-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--定义文件输出路径 为项目根目录下-->
+        <file>log/log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--定义文件滚动时的文件名的格式-->
+            <fileNamePattern>log/file/log.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!--定义最大日志周期-->
+            <maxHistory>7</maxHistory>
+            <!--定义最大日志容量-->
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <!--每个日志文件最大1000MB-->
+            <maxFileSize>1000MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--文件输出器2,配置过滤级别为error,错误文件单独放一个文件夹-->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <File>log/error.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/error/error-%d{yyyyMMdd}.log.%i</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>2</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!--文件输出器3,配置过滤级别为warn,警告文件单独放一个文件夹-->
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <File>log/warn.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/warn/warn-%d{yyyyMMdd}.log.%i</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>2</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <appender name="hibernate" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/hibernate.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/hibernate/hibernate.%d{yyyy-MM-dd}.log.gz
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="spring" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/spring.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/spring/spring.%d{yyyy-MM-dd}.log.gz
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--新增appender 日志输入到logstash中，端口5044，采用tcp的方式传输-->
+    <appender name="LOGSTASH"
+              class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--配置本地LOGSTASH服务端地址-->
+        <destination>localhost:5044</destination>
+        <!-- 日志输出编码 -->
+        <encoder
+                class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "severity": "%level",
+                        "service": "${springAppName:-}",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "exportable": "%X{X-Span-Export:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "rest": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!--root是默认的logger 这里设定输出级别是info,appender的使用时要区分大小写-->
+    <!--默认设置为warn，避免控制台打印很多无关紧要的info信息-->
+    <root level="info">
+        <!--定义了一个appender，日志会通过这个appender输出-->
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="LOGSTASH"/>
+    </root>
+
+    <!--logger节点，并且通过getLogger("name/class")获取到这个logger，输出日志的时候，就会使用这个logger配置的appender输出-->
+    <!--由于当使用到了指定的logger节点输出日志时，也会使用到root的appender输出，additivity属性设置false用于屏蔽root的输出，以免日志输出两份-->
+    <logger name="com.trs" level="info" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="LOGSTASH"/>
+    </logger>
+
+    <logger name="org.hibernate" level="info" additivity="false">
+        <appender-ref ref="hibernate"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.springframework" level="info" additivity="false">
+        <appender-ref ref="spring"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!--alibaba下日志直接到文件，里面涉及使用到的nacos 会持续发送心跳检测info级别，控制台不输出-->
+    <logger name="com.alibaba" level="warn" additivity="false">
+        <appender-ref ref="WARN_FILE"/>
+    </logger>
+
+    <!--springfox 主要是swagger配合使用的一些东西，日志直接输出到文件-->
+    <logger name="springfox" level="warn" additivity="false">
+        <appender-ref ref="WARN_FILE"/>
+    </logger>
+
+    <!--apache下的错误输出到文件，控制台不打印-->
+    <logger name="org.apache" level="error" additivity="false">
+        <appender-ref ref="ERROR_FILE"/>
+    </logger>
+
+</configuration>
