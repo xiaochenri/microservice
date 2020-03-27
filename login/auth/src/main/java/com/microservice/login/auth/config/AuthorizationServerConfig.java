@@ -1,6 +1,7 @@
 package com.microservice.login.auth.config;
 
 import com.microservice.login.auth.SpringUtil;
+import com.microservice.login.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
@@ -45,8 +46,11 @@ public class AuthorizationServerConfig
         DefaultAccessTokenConverter converter = new DefaultAccessTokenConverter();
         converter.setUserTokenConverter(new CustomServerUserAuthenticationConverter());
 
+
+        UserService userService = SpringUtil.getApplicationContext().getBean(UserService.class);
         endpoints.authenticationManager(authenticationManager)
-                .tokenStore(tokenStore()).accessTokenConverter(converter);
+                .tokenStore(tokenStore()).accessTokenConverter(converter).userDetailsService(userService);
+        //刷新token必须使用到userService PreAuthenticatedAuthenticationProvider
 
     }
 

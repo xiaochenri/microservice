@@ -14,9 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
+ *
+ * {@link LogoutFilter}
+ *
  * @author hqc
  * @date 2020/3/25 11:26
  */
@@ -42,7 +46,6 @@ public class OauthLogoutSuccessHandler implements LogoutSuccessHandler {
             writer.write("退出成功");
             writer.flush();
         }
-
 
 	}
 }

@@ -40,23 +40,29 @@ public class User implements UserDetails {
         return this.username;
     }
 
+    /**账户默认为过期
+     * @return
+     */
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
+    /**账户默认未锁定
+     * @return
+     */
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

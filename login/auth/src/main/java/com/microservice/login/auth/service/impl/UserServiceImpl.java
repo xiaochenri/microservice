@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author hqc
@@ -45,6 +46,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User loadUserByUsername(String userName) {
-        return null;
+        User user = new User();
+        String passWord = "123";
+        user.setUsername(passWord);
+        user.setPassword(passWord);
+        user.setId(UUID.randomUUID().toString());
+        return user;
     }
 }
