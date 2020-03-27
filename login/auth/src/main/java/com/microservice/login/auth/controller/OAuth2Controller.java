@@ -70,7 +70,8 @@ public class OAuth2Controller {
 
 
     /**
-     * 获取刷新后的token，此处我认为做成自动刷新的机制
+     * 获取刷新后的token，此处我认为做成定时请求刷新的机制，将选择权交由前端控制
+     * 若不能获取到token时去登录
      *
      * @param request
      * @param response
