@@ -1,5 +1,6 @@
 package com.example.gateway.router;
 
+import com.microservice.CommonConstants;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -41,7 +42,7 @@ public class AuthenticationInfoFilter extends ZuulFilter {
             if (principal != null) {
                 RequestContext currentContext = RequestContext.getCurrentContext();
 
-                currentContext.addZuulRequestHeader("authentication_info", principal.toString());
+                currentContext.addZuulRequestHeader(CommonConstants.AUTHENTICATION_INFO_HEADER, principal.toString());
             }
         }
 

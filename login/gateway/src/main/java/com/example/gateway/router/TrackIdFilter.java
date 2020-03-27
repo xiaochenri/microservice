@@ -1,5 +1,6 @@
 package com.example.gateway.router;
 
+import com.microservice.CommonConstants;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -35,7 +36,7 @@ public class TrackIdFilter extends ZuulFilter {
 
         String s = UUID.randomUUID().toString();
 
-        currentContext.addZuulRequestHeader("unique_track_id",s);
+        currentContext.addZuulRequestHeader(CommonConstants.REQUEST_TRACK_ID_HEADER,s);
 
         return null;
     }
