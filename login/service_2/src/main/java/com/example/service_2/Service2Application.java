@@ -22,15 +22,17 @@ public class Service2Application {
     @RequestMapping(value = "/test")
     public String test(HttpServletRequest request,String param){
 
-        Enumeration<String> headerNames = request.getHeaderNames();
+        throw new RuntimeException("123");
 
-        while (headerNames.hasMoreElements()){
-            String s = headerNames.nextElement();
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//
+//        while (headerNames.hasMoreElements()){
+//            String s = headerNames.nextElement();
+//
+//            System.out.println("header:"+s+"  value:"+request.getHeader(s));
+//        }
 
-            System.out.println("header:"+s+"  value:"+request.getHeader(s));
-        }
-
-        return param;
+//        return param;
     }
 
 }

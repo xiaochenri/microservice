@@ -1,6 +1,6 @@
 package com.example.service_1.config;
 
-import com.example.service_1.Filter.SysContent;
+import com.example.service_1.filter.SysContent;
 import com.microservice.CommonConstants;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

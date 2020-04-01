@@ -1,4 +1,4 @@
-package com.example.service_1;
+package com.example.gateway;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;

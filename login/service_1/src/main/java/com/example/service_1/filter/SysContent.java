@@ -1,4 +1,4 @@
-package com.example.service_1.Filter;
+package com.example.service_1.filter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

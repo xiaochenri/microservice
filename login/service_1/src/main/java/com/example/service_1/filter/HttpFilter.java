@@ -1,4 +1,4 @@
-package com.example.service_1.Filter;
+package com.example.service_1.filter;
 
 import org.springframework.stereotype.Component;
 
