@@ -14,4 +14,6 @@
 
 6.elk:日志收集
 
-可考虑加入seate，sentinel等来进一步完整化项目
+7.seata:分布式事务控制
+
+可考虑加入sentinel等来进一步完整化项目
