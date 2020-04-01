@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Primary;
 import javax.sql.DataSource;
 
 /**
- * 设置seata的datasource,这里必须设置，seata的事物回滚是基于此借助服务的datasource进行数据操作
+ * 设置seata的datasource,这里必须设置，seata的全局事物是基于此借助服务的datasource进行数据操作
  *
  * @author hqc
  * @date 2020/3/31 22:14
